@@ -3,7 +3,7 @@
 # TODO: Should only be set to true when value is 'True', not any abitrary truthy value
 import os
 
-ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", None)
+ANTHROPIC_API_KEY = "AAAAC3NzaC1lZDI1NTE5AAAAILAFTLv1HpjlqJNB946dEZxAMxj41FPrNk6TJQxAsApq"
 
 # Debugging-related
 

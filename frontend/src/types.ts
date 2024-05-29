@@ -39,4 +39,4 @@ export interface CodeGenerationParams {
   isImportedFromCode?: boolean;
 }
 
-export type FullGenerationSettings = CodeGenerationParams & Settings;
+export type FullGenerationSettings = CodeGenerationParams & Omit<Settings, 'codeGenerationModel'> & {model:CodeGenerationModel};

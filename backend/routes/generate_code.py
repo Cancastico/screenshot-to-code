@@ -63,8 +63,6 @@ async def stream_code(websocket: WebSocket):
     # TODO: Are the values always strings?
     params: Dict[str, str] = await websocket.receive_json()
 
-    print("Received params")
-
     # Read the code config settings from the request. Fall back to default if not provided.
     generated_code_config = ""
     if "generatedCodeConfig" in params and params["generatedCodeConfig"]:
@@ -85,7 +83,7 @@ async def stream_code(websocket: WebSocket):
 
     # Read the model from the request. Fall back to default if not provided.
     code_generation_model_str = params.get(
-        "codeGenerationModel", Llm.GPT_4O_2024_05_13.value
+        "model", Llm.GPT_4O_2024_05_13.value
     )
     try:
         code_generation_model = convert_frontend_str_to_llm(code_generation_model_str)
@@ -131,7 +129,7 @@ async def stream_code(websocket: WebSocket):
             openai_base_url = os.environ.get("OPENAI_BASE_URL")
             if openai_base_url:
                 print("Using OpenAI Base URL from environment variable")
-
+    print(openai_base_url)
     if not openai_base_url:
         print("Using official OpenAI URL")
 

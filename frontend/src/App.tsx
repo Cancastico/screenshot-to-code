@@ -199,7 +199,7 @@ function App() {
     setAppState(AppState.CODING);
 
     // Merge settings with params
-    const updatedParams = { ...params, ...settings };
+    const updatedParams = { ...params, ...settings, model:settings.codeGenerationModel };
 
     generateCode(
       wsRef,
