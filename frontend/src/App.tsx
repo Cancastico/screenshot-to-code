@@ -63,7 +63,7 @@ function App() {
       isImageGenerationEnabled: true,
       editorTheme: EditorTheme.COBALT,
       generatedCodeConfig: Stack.HTML_TAILWIND,
-      codeGenerationModel: CodeGenerationModel.GPT_4O_2024_05_13,
+      model: CodeGenerationModel.GPT_4O_2024_05_13,
       // Only relevant for hosted version
       isTermOfServiceAccepted: false,
     },
@@ -72,7 +72,7 @@ function App() {
 
   // Code generation model from local storage or the default value
   const selectedCodeGenerationModel =
-    settings.codeGenerationModel || CodeGenerationModel.GPT_4_VISION;
+    settings.model || CodeGenerationModel.GPT_4_VISION;
 
   // App history
   const [appHistory, setAppHistory] = useState<History>([]);
@@ -199,7 +199,7 @@ function App() {
     setAppState(AppState.CODING);
 
     // Merge settings with params
-    const updatedParams = { ...params, ...settings, model:settings.codeGenerationModel };
+    const updatedParams = { ...params, ...settings, model:settings.model };
 
     generateCode(
       wsRef,

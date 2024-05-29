@@ -30,6 +30,8 @@ router = APIRouter()
 
 
 def write_logs(prompt_messages: List[ChatCompletionMessageParam], completion: str):
+    print("Writing logs...")
+    print(os.getcwd())
     # Get the logs path from environment, default to the current working directory
     logs_path = os.environ.get("LOGS_PATH", os.getcwd())
 
@@ -83,7 +85,7 @@ async def stream_code(websocket: WebSocket):
 
     # Read the model from the request. Fall back to default if not provided.
     code_generation_model_str = params.get(
-        "model", Llm.GPT_4O_2024_05_13.value
+        "model", Llm.llava.value
     )
     try:
         code_generation_model = convert_frontend_str_to_llm(code_generation_model_str)
@@ -110,7 +112,7 @@ async def stream_code(websocket: WebSocket):
     if not openai_api_key and (
         code_generation_model == Llm.GPT_4_VISION
         or code_generation_model == Llm.GPT_4_TURBO_2024_04_09
-        or code_generation_model == Llm.GPT_4O_2024_05_13
+        or code_generation_model == Llm.llava
     ):
         print("OpenAI API key not found")
         await throw_error(
@@ -121,7 +123,7 @@ async def stream_code(websocket: WebSocket):
     # Get the OpenAI Base URL from the request. Fall back to environment variable if not provided.
     openai_base_url = None
     # Disable user-specified OpenAI Base URL in prod
-    if not os.environ.get("IS_PROD"):
+    if not False:
         if "openAiBaseURL" in params and params["openAiBaseURL"]:
             openai_base_url = params["openAiBaseURL"]
             print("Using OpenAI Base URL from client-side settings dialog")
@@ -129,7 +131,6 @@ async def stream_code(websocket: WebSocket):
             openai_base_url = os.environ.get("OPENAI_BASE_URL")
             if openai_base_url:
                 print("Using OpenAI Base URL from environment variable")
-    print(openai_base_url)
     if not openai_base_url:
         print("Using official OpenAI URL")
 
@@ -145,7 +146,6 @@ async def stream_code(websocket: WebSocket):
 
     async def process_chunk(content: str):
         await websocket.send_json({"type": "chunk", "value": content})
-
     # Image cache for updates so that we don't have to regenerate images
     image_cache: Dict[str, str] = {}
 
@@ -156,6 +156,7 @@ async def stream_code(websocket: WebSocket):
             original_imported_code, valid_stack
         )
         for index, text in enumerate(params["history"][1:]):
+            print("X1" + index)
             if index % 2 == 0:
                 message: ChatCompletionMessageParam = {
                     "role": "user",
@@ -203,14 +204,15 @@ async def stream_code(websocket: WebSocket):
                 prompt_messages.append(message)
 
             image_cache = create_alt_url_mapping(params["history"][-2])
-
+    print("x2")
     if validated_input_mode == "video":
         video_data_url = params["image"]
         prompt_messages = await assemble_claude_prompt_video(video_data_url)
-
+    print("x4")
     # pprint_prompt(prompt_messages)  # type: ignore
 
     if SHOULD_MOCK_AI_RESPONSE:
+        print("Mocking AI response...")
         completion = await mock_completion(
             process_chunk, input_mode=validated_input_mode
         )
@@ -246,6 +248,10 @@ async def stream_code(websocket: WebSocket):
                 )
                 exact_llm_version = code_generation_model
             else:
+                print("x6")
+                # print(prompt_messages)
+                # print(openai_base_url)
+                # print(openai_api_key)
                 completion = await stream_openai_response(
                     prompt_messages,  # type: ignore
                     api_key=openai_api_key,
@@ -288,7 +294,7 @@ async def stream_code(websocket: WebSocket):
                 )
             )
             return await throw_error(error_message)
-
+    print("x3")
     if validated_input_mode == "video":
         completion = extract_tag_content("html", completion)
 

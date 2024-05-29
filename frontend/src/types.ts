@@ -13,7 +13,7 @@ export interface Settings {
   isImageGenerationEnabled: boolean;
   editorTheme: EditorTheme;
   generatedCodeConfig: Stack;
-  codeGenerationModel: CodeGenerationModel;
+  model: CodeGenerationModel;
   // Only relevant for hosted version
   isTermOfServiceAccepted: boolean;
 }

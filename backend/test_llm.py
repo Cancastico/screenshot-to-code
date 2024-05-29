@@ -25,8 +25,8 @@ class TestConvertFrontendStrToLlm(unittest.TestCase):
             "Should convert 'gpt-4-turbo-2024-04-09' to Llm.GPT_4_TURBO_2024_04_09",
         )
         self.assertEqual(
-            convert_frontend_str_to_llm("gpt-4o-2024-05-13"),
-            Llm.GPT_4O_2024_05_13,
+            convert_frontend_str_to_llm("llava"),
+            Llm.llava,
             "Should convert 'gpt-4o-2024-05-13' to Llm.GPT_4O_2024_05_13",
         )
 

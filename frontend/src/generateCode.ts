@@ -27,6 +27,7 @@ export function generateCode(
   wsRef.current = ws;
 
   ws.addEventListener("open", () => {
+    console.log(params)
     ws.send(JSON.stringify(params));
   });
 

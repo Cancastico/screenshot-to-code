@@ -13,7 +13,7 @@ from utils import pprint_prompt
 class Llm(Enum):
     GPT_4_VISION = "gpt-4-vision-preview"
     GPT_4_TURBO_2024_04_09 = "gpt-4-turbo-2024-04-09"
-    GPT_4O_2024_05_13 = "llava"
+    llava = "llava"
     CLAUDE_3_SONNET = "claude-3-sonnet-20240229"
     CLAUDE_3_OPUS = "claude-3-opus-20240229"
     CLAUDE_3_HAIKU = "claude-3-haiku-20240307"
@@ -51,7 +51,7 @@ async def stream_openai_response(
     if (
         model == Llm.GPT_4_VISION
         or model == Llm.GPT_4_TURBO_2024_04_09
-        or model == Llm.GPT_4O_2024_05_13
+        or model == Llm.llava
     ):
         params["max_tokens"] = 4096
 
